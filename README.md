@@ -39,9 +39,9 @@ task "drone-runner" {
         DRONE_RPC_DUMP_HTTP_BODY="true"
     }
     config {
-        image = "docker.io/procsiab/drone-runner-nomad-podman:1.0-linux-amd64"
+        image = "docker.io/procsiab/drone-runner-nomad-podman:0.1-linux-amd64"
         volumes = [
-            "/run/user/{{common_nomad_uid}}/podman/podman.sock:/var/run/docker.sock"
+            "/run/user/{{common_nomad_uid}}/podman/podman.sock:/var/run/podman.sock"
         ]
         network_mode = "slirp4netns"
         ports = ["runner"]
