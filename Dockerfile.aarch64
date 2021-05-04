@@ -1,0 +1,33 @@
+# Build the sources
+FROM golang:1.14.15 AS golang-builder
+
+WORKDIR /go/src
+COPY . .
+COPY qemu-aarch64-static /usr/bin/
+
+RUN sh scripts/build.sh
+
+# Get the certificates
+FROM alpine:3.6.5 AS alpine-certs
+
+COPY qemu-aarch64-static /usr/bin/
+RUN apk add -U --no-cache ca-certificates
+
+# Create the container
+FROM alpine:3.6.5
+LABEL maintainer "Lorenzo Prosseda <lerokamut@gmail.com>"
+
+COPY qemu-aarch64-static /usr/bin/
+
+EXPOSE 3000
+
+ENV GODEBUG netdns=go
+
+COPY --from=alpine-certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+LABEL com.centurylinklabs.watchtower.stop-signal="SIGINT"
+
+COPY --from=golang-builder /go/src/release/linux/amd64/drone-runner-nomad-podman /bin/
+
+RUN rm -f /usr/bin/qemu-aarch64-static
+
+ENTRYPOINT ["/bin/drone-runner-nomad-podman"]

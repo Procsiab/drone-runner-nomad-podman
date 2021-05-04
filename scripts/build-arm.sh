@@ -10,4 +10,4 @@ set -e
 set -x
 
 # linux
-GOOS=linux GOARCH=amd64 go build -o release/linux/amd64/drone-runner-nomad-podman
+GOOS=linux GOARCH=arm   go build -o release/linux/arm/drone-runner-nomad-podman

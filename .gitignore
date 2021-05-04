@@ -1,1 +1,4 @@
-.env
+# Application data
+config/*
+# QEMU's static binaries
+qemu-*
