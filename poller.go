@@ -81,14 +81,14 @@ func (p *Poller) do(ctx context.Context) error {
 
 	task := &api.Task{
 		Name:      "stage",
-		Driver:    "docker",
+		Driver:    "podman",
 		Env:       p.config.Environ,
 		Resources: &api.Resources{},
 		Config: map[string]interface{}{
 			"image":      p.config.Image.Name,
 			"force_pull": p.config.Image.Pull,
 			"volumes": []string{
-				"/var/run/docker.sock:/var/run/docker.sock",
+				"/var/run/podman.sock:/var/run/docker.sock",
 			},
 			"entrypoint": []string{
 				"/bin/drone-runner-docker",
